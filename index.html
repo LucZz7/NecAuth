@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NecAuth - Two-Factor Authenticator</title>
-<meta name="description" content="NecAuth - clean two-factor authenticator. Add a secret key, get real TOTP codes. By NECXY DEVELOPER.">
+<meta name="description" content="NecAuth - two-factor authenticator by NECXY DEVELOPER. Enter a secret key, generate a real TOTP code.">
 <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0a0b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,18 +16,8 @@
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
-    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></symbol>
-    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5v14"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
-    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
-    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
-    <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol>
-    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></symbol>
-    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5M12 3v12"/></symbol>
-    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-    <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3M21 21v.01M12 7v3a2 2 0 0 1-2 2H7M3 12h.01M12 3h.01M12 16v.01M16 12h1M21 12v.01M12 21v-1"/></symbol>
     <symbol id="i-telegram" viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.63 18.9 18.95c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.19c-.25.25-.46.46-.95.46l.34-4.86 8.85-8c.38-.34-.08-.53-.6-.19l-10.94 6.89-4.71-1.47c-1.02-.32-1.04-1.02.21-1.51L20.6 3.2c.85-.32 1.6.19 1.34 1.43Z"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></symbol>
   </defs>
 </svg>
 
@@ -37,101 +26,37 @@
 
 <header class="header">
   <div class="header-inner">
-    <a class="brand" href="#" aria-label="NecAuth">
-      <span class="brand-mark"><svg><use href="#i-shield"/></svg></span>
-      <span class="brand-name">Nec<span>Auth</span></span>
-    </a>
-    <a class="tg-btn" id="headerTelegramBtn" href="https://t.me/i_necxy" target="_blank" rel="noopener" aria-label="Telegram - @i_necxy" title="@i_necxy on Telegram">
+    <span class="brand-name">Nec<span>Auth</span></span>
+    <a class="tg-btn" href="https://t.me/i_necxy" target="_blank" rel="noopener" aria-label="Telegram - @i_necxy" title="@i_necxy">
       <svg><use href="#i-telegram"/></svg>
     </a>
   </div>
 </header>
 
-<main class="wrap">
-  <section class="intro anim-in">
-    <h1>Two-Factor <span class="grad">Authenticator</span></h1>
-    <p>Add a secret key. Get real login codes, every 30 seconds.</p>
-  </section>
-
-  <form class="glass panel anim-in d1" id="addForm">
-    <div class="row2">
-      <div class="field">
-        <label for="issuerInput">Website</label>
-        <input class="input" id="issuerInput" type="text" placeholder="Google, GitHub, Instagram..." autocomplete="off" required>
-      </div>
-      <div class="field">
-        <label for="accountInput">Account</label>
-        <input class="input" id="accountInput" type="text" placeholder="Username or email" autocomplete="off" required>
-      </div>
+<main class="center">
+  <form class="glass box anim-in" id="authForm">
+    <div class="box-icon"><svg><use href="#i-key"/></svg></div>
+    <h1>Two-Factor Authentication</h1>
+    <label class="sr" for="secretInput">2FA Secret Key</label>
+    <input class="input mono" id="secretInput" type="text" placeholder="Enter your 2FA secret key" autocomplete="off" spellcheck="false">
+    <button class="btn-generate" type="submit"><span>Generate Code</span></button>
+    <p class="error" id="errorText"></p>
+    <div class="result" id="resultBox">
+      <div class="code" id="codeText" title="Tap to copy">------</div>
+      <div class="bar"><i id="timeBar"></i></div>
+      <p class="expires">Expires in <b id="secondsLeft">30</b>s &middot; tap code to copy</p>
     </div>
-    <div class="field">
-      <label for="secretInput">Secret Key</label>
-      <div class="secret-row">
-        <input class="input mono" id="secretInput" type="text" placeholder="JBSWY3DPEHPK3PXP" autocomplete="off" spellcheck="false" required>
-        <button class="btn btn-primary" type="submit"><svg><use href="#i-plus"/></svg> Add</button>
-      </div>
-    </div>
-    <details class="import-box">
-      <summary><svg><use href="#i-qr"/></svg> Import otpauth:// link</summary>
-      <div class="secret-row" style="margin-top:12px">
-        <input class="input mono" id="otpauthInput" type="text" placeholder="otpauth://totp/..." autocomplete="off" spellcheck="false" style="text-transform:none">
-        <button class="btn" type="button" id="importOtpauthBtn">Import</button>
-      </div>
-    </details>
   </form>
-
-  <section class="glass panel anim-in d2">
-    <div class="list-head">
-      <h2><svg><use href="#i-key"/></svg> My Codes <span id="accountCount"></span></h2>
-      <div class="search"><svg><use href="#i-search"/></svg><input class="input" id="searchInput" type="text" placeholder="Search"></div>
-      <button class="icon-btn" id="exportBtn" title="Backup" aria-label="Export backup"><svg><use href="#i-download"/></svg></button>
-      <button class="icon-btn" id="importBtn" title="Restore" aria-label="Import backup"><svg><use href="#i-upload"/></svg></button>
-      <input type="file" id="importFile" accept="application/json" class="hidden">
-    </div>
-    <div class="accounts" id="accountsList"></div>
-    <div class="empty" id="emptyState">
-      <svg><use href="#i-lock"/></svg>
-      <b>No accounts yet</b>
-      Add one above and its live code appears here.
-    </div>
-  </section>
-
-  <p class="note anim-in d3"><svg><use href="#i-lock"/></svg> Keys stay on this device only. Nothing is uploaded.</p>
 </main>
 
 <footer>
-  <span>Developed by <b>NECXY DEVELOPER</b></span>
-  <a href="https://t.me/i_necxy" target="_blank" rel="noopener" data-telegram-link><svg><use href="#i-telegram"/></svg> <span data-owner-telegram>@i_necxy</span></a>
+  <p class="f-line1">Developed by <b>NECXY DEVELOPER</b></p>
+  <p>Crafting clean, fast and secure tools - made with passion by Necxy.</p>
+  <p>Telegram @i_necxy &middot; NecAuth &copy; 2026</p>
 </footer>
-
-<div class="modal-backdrop" id="editBackdrop">
-  <form class="glass modal" id="editForm">
-    <h3>Edit Account</h3>
-    <input type="hidden" id="editId">
-    <div class="field"><label for="editIssuer">Website</label><input class="input" id="editIssuer" required></div>
-    <div class="field"><label for="editAccount">Account</label><input class="input" id="editAccount" required></div>
-    <div class="field"><label for="editSecret">Secret Key</label><input class="input mono" id="editSecret" required spellcheck="false"></div>
-    <div class="modal-actions">
-      <button class="btn" type="button" id="editCancel">Cancel</button>
-      <button class="btn btn-primary" type="submit">Save</button>
-    </div>
-  </form>
-</div>
-
-<div class="modal-backdrop" id="deleteBackdrop">
-  <div class="glass modal">
-    <h3>Delete account?</h3>
-    <p id="deleteText">This removes the account and its key from this device.</p>
-    <div class="modal-actions">
-      <button class="btn" id="deleteCancel" type="button">Cancel</button>
-      <button class="btn btn-primary" id="deleteConfirm" type="button">Delete</button>
-    </div>
-  </div>
-</div>
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="js/config.js"></script>
 <script src="js/totp.js"></script>
 <script src="js/app.js"></script>
 </body>
