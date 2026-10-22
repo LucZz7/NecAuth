@@ -14,23 +14,24 @@ button,input{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--red2);outline-offset:2px}
 .hidden{display:none !important}
 
-/* Animated background: drifting orbs + rising particles */
+/* Static background glow (no background animation) */
 .orb{position:fixed;border-radius:50%;filter:blur(90px);z-index:-2;pointer-events:none;opacity:.5}
-.orb-a{width:460px;height:460px;background:radial-gradient(circle,#e03131,transparent 65%);top:-150px;left:-110px;animation:drift 13s ease-in-out infinite alternate}
-.orb-b{width:400px;height:400px;background:radial-gradient(circle,#7a1010,transparent 65%);bottom:-150px;right:-100px;animation:drift 17s ease-in-out infinite alternate-reverse}
-.orb-c{width:260px;height:260px;background:radial-gradient(circle,#ff3b3b,transparent 65%);top:44%;left:56%;opacity:.28;animation:drift 21s ease-in-out infinite alternate}
-@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(64px,46px) scale(1.15)}}
-.particle{position:fixed;bottom:-12px;width:5px;height:5px;border-radius:50%;background:rgba(255,90,90,.65);box-shadow:0 0 12px rgba(255,59,59,.8);z-index:-1;pointer-events:none;animation:floatUp 11s linear infinite}
-@keyframes floatUp{0%{transform:translateY(0);opacity:0}8%{opacity:.9}88%{opacity:.55}100%{transform:translateY(-105vh);opacity:0}}
+.orb-a{width:460px;height:460px;background:radial-gradient(circle,#e03131,transparent 65%);top:-150px;left:-110px}
+.orb-b{width:400px;height:400px;background:radial-gradient(circle,#7a1010,transparent 65%);bottom:-150px;right:-100px}
+.orb-c{width:260px;height:260px;background:radial-gradient(circle,#ff3b3b,transparent 65%);top:44%;left:56%;opacity:.28}
 .anim-in{animation:rise .7s cubic-bezier(.2,.8,.25,1) both}
 .d1{animation-delay:.12s}
 @keyframes rise{from{opacity:0;transform:translateY(24px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 @keyframes shine{from{transform:translateX(-130%) skewX(-18deg)}to{transform:translateX(240%) skewX(-18deg)}}
 @keyframes digitIn{0%{opacity:0;transform:translateY(14px) scale(.8);filter:blur(4px)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
-@keyframes borderFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+/* Tap-only animations: ripple + one-time glow pulse */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);transform:scale(0);pointer-events:none;animation:rippleAnim .55s ease-out forwards;z-index:3}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+button,.tile,.tg-btn,.icon-btn,.mini-btn,.pill,.btn-small,.copy-btn,.paste-btn{position:relative}
+.pill,.icon-btn,.mini-btn,.tile,.copy-btn,.btn-ghost,.btn-danger{overflow:hidden}
+@keyframes tapGlow{0%{box-shadow:0 0 0 0 rgba(255,59,59,.45),var(--shadow)}100%{box-shadow:0 0 0 22px rgba(255,59,59,0),var(--shadow)}}
+.box-wrap.tapped{animation:tapGlow .65s ease-out}
 
 /* Header */
 .header{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);background:rgba(8,8,10,.55);border-bottom:1px solid var(--border)}
@@ -44,9 +45,9 @@ button,input{font:inherit;color:inherit}
 /* Layout + animated gradient border box */
 .center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:38px 20px;width:100%;gap:18px}
 .glass{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);box-shadow:var(--shadow)}
-.box-wrap{position:relative;width:100%;max-width:460px;border-radius:24px;padding:1.5px;background:linear-gradient(130deg,rgba(255,59,59,.85),rgba(255,255,255,.22),rgba(224,49,49,.15),rgba(255,255,255,.3),rgba(255,59,59,.85));background-size:280% 280%;animation:borderFlow 7s ease infinite}
+.box-wrap{position:relative;width:100%;max-width:460px;border-radius:24px;padding:1.5px;background:linear-gradient(130deg,rgba(255,59,59,.85),rgba(255,255,255,.22),rgba(224,49,49,.15),rgba(255,255,255,.3),rgba(255,59,59,.85));background-size:280% 280%}
 .box{border-radius:23px;background:rgba(12,12,15,.82);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);padding:34px 30px 30px;text-align:center;box-shadow:var(--shadow)}
-.box-icon{width:58px;height:58px;margin:0 auto 16px;border-radius:17px;display:grid;place-items:center;background:rgba(224,49,49,.13);border:1px solid var(--border-red);color:#ff6b6b;animation:iconFloat 4.5s ease-in-out infinite}
+.box-icon{width:58px;height:58px;margin:0 auto 16px;border-radius:17px;display:grid;place-items:center;background:rgba(224,49,49,.13);border:1px solid var(--border-red);color:#ff6b6b}
 .box-icon svg{width:27px;height:27px}
 .box h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:22px}
 
@@ -59,11 +60,12 @@ button,input{font:inherit;color:inherit}
 .paste-btn{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:10px;display:grid;place-items:center;border:1px solid transparent;background:rgba(255,255,255,.05);cursor:pointer;transition:.2s;color:var(--muted)}
 .paste-btn:hover{color:#fff;border-color:var(--border-red);background:rgba(224,49,49,.15)}
 .paste-btn svg{width:17px;height:17px}
-.btn-generate{position:relative;overflow:hidden;width:100%;padding:14px;border:none;border-radius:13px;font-weight:800;font-size:16px;color:#fff;cursor:pointer;background:linear-gradient(120deg,var(--red2),var(--red-dark),var(--red2));background-size:220% 220%;animation:gradientMove 5s ease infinite;box-shadow:0 14px 32px rgba(224,49,49,.38);transition:.2s}
+.btn-generate{position:relative;overflow:hidden;width:100%;padding:14px;border:none;border-radius:13px;font-weight:800;font-size:16px;color:#fff;cursor:pointer;background:linear-gradient(120deg,var(--red2),var(--red-dark),var(--red2));background-size:220% 220%;box-shadow:0 14px 32px rgba(224,49,49,.38);transition:.2s}
 .btn-generate:hover{transform:translateY(-1px);box-shadow:0 18px 40px rgba(224,49,49,.52)}
 .btn-generate:active{transform:scale(.98)}
 .btn-generate span{position:relative;z-index:1}
-.btn-generate::after{content:"";position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:shine 2.8s ease-in-out infinite}
+.btn-generate::after{content:"";position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-130%) skewX(-18deg)}
+.btn-generate.shine-once::after{animation:shine .7s ease}
 .error{display:none;color:#ff8585;font-size:14px;font-weight:600;margin-top:13px}
 .error.show{display:block;animation:shake .45s ease}
 
@@ -122,7 +124,7 @@ button,input{font:inherit;color:inherit}
 .d2{animation-delay:.2s}
 .time-chip{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:11px;font-size:12.5px;color:var(--muted2);font-family:var(--mono)}
 .time-chip svg{width:14px;height:14px}
-.time-chip .dot{width:8px;height:8px;border-radius:50%;background:#40c778;box-shadow:0 0 10px #40c778;animation:dotPulse 1.8s ease-in-out infinite}
+.time-chip .dot{width:8px;height:8px;border-radius:50%;background:#40c778;box-shadow:0 0 10px #40c778}
 @keyframes dotPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
 .pill{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 18px;border-radius:99px;border:1px solid var(--border);background:rgba(255,255,255,.06);font-weight:700;font-size:13.5px;cursor:pointer;transition:.25s}
 .pill:hover{border-color:var(--border-red);background:rgba(224,49,49,.13);transform:translateY(-1px)}
