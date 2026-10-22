@@ -25,13 +25,15 @@ button,input{font:inherit;color:inherit}
 @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 @keyframes shine{from{transform:translateX(-130%) skewX(-18deg)}to{transform:translateX(240%) skewX(-18deg)}}
 @keyframes digitIn{0%{opacity:0;transform:translateY(14px) scale(.8);filter:blur(4px)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
-/* Tap-only animations: ripple + one-time glow pulse */
-.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);transform:scale(0);pointer-events:none;animation:rippleAnim .55s ease-out forwards;z-index:3}
-@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+/* Tap animation: small ring + dot burst exactly at the tap point,
+   anywhere on screen. Nothing animates on its own. */
+.tap-fx{position:fixed;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;pointer-events:none;z-index:9999}
+.tap-fx::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,59,59,.9);box-shadow:0 0 14px rgba(255,59,59,.45),inset 0 0 10px rgba(255,59,59,.25);animation:tapRing .45s cubic-bezier(.2,.7,.3,1) forwards}
+.tap-fx::after{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 10px rgba(255,59,59,.8);animation:tapDot .45s ease-out forwards}
+@keyframes tapRing{from{transform:scale(.22);opacity:1}to{transform:scale(1);opacity:0}}
+@keyframes tapDot{0%{transform:scale(1);opacity:.95}100%{transform:scale(.35);opacity:0}}
 button,.tile,.tg-btn,.icon-btn,.mini-btn,.pill,.btn-small,.copy-btn,.paste-btn{position:relative}
 .pill,.icon-btn,.mini-btn,.tile,.copy-btn,.btn-ghost,.btn-danger{overflow:hidden}
-@keyframes tapGlow{0%{box-shadow:0 0 0 0 rgba(255,59,59,.45),var(--shadow)}100%{box-shadow:0 0 0 22px rgba(255,59,59,0),var(--shadow)}}
-.box-wrap.tapped{animation:tapGlow .65s ease-out}
 
 /* Header */
 .header{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);background:rgba(8,8,10,.55);border-bottom:1px solid var(--border)}
@@ -65,7 +67,6 @@ button,.tile,.tg-btn,.icon-btn,.mini-btn,.pill,.btn-small,.copy-btn,.paste-btn{p
 .btn-generate:active{transform:scale(.98)}
 .btn-generate span{position:relative;z-index:1}
 .btn-generate::after{content:"";position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-130%) skewX(-18deg)}
-.btn-generate.shine-once::after{animation:shine .7s ease}
 .error{display:none;color:#ff8585;font-size:14px;font-weight:600;margin-top:13px}
 .error.show{display:block;animation:shake .45s ease}
 

@@ -12,37 +12,17 @@
     if (window.caches) caches.keys().then(function (keys) { keys.forEach(function (k) { caches.delete(k); }); }).catch(function () {});
   }
 
-  /* Tap-only animations: cool ripple on every tap + one glow pulse
-     on the box. No background animation runs on its own. */
+  /* Tap animation: wherever the finger/cursor lands on screen, a small
+     red ring + dot bursts at that exact tap point and fades out.
+     Nothing else animates on tap; no background animation runs on its own. */
   document.addEventListener("pointerdown", function (e) {
-    var wrap = document.querySelector(".box-wrap");
-    if (wrap && e.target.closest(".box")) {
-      wrap.classList.remove("tapped");
-      void wrap.offsetWidth;
-      wrap.classList.add("tapped");
-      setTimeout(function () { wrap.classList.remove("tapped"); }, 680);
-    }
-    var gen = $("generateBtn");
-    if (gen && e.target.closest("#generateBtn")) {
-      gen.classList.remove("shine-once");
-      void gen.offsetWidth;
-      gen.classList.add("shine-once");
-      setTimeout(function () { gen.classList.remove("shine-once"); }, 720);
-    }
-    var t = e.target.closest("button, .tile, .tg-btn");
-    if (!t) return;
-    var rect = t.getBoundingClientRect();
-    if (!rect.width) return;
-    var size = Math.max(rect.width, rect.height);
-    var ripple = document.createElement("span");
-    ripple.className = "ripple";
-    ripple.style.width = ripple.style.height = size + "px";
-    ripple.style.left = (e.clientX - rect.left - size / 2) + "px";
-    ripple.style.top = (e.clientY - rect.top - size / 2) + "px";
-    var cs = getComputedStyle(t);
-    if (cs.overflow !== "hidden" && !t.classList.contains("btn-generate")) t.style.overflow = "hidden";
-    t.appendChild(ripple);
-    setTimeout(function () { ripple.remove(); }, 580);
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    var fx = document.createElement("span");
+    fx.className = "tap-fx";
+    fx.style.left = e.clientX + "px";
+    fx.style.top = e.clientY + "px";
+    document.body.appendChild(fx);
+    setTimeout(function () { fx.remove(); }, 500);
   });
 
   function esc(s) {
