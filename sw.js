@@ -1,5 +1,5 @@
 /* NecAuth service worker - offline app shell */
-var CACHE = "necauth-v1";
+var CACHE = "necauth-v2";
 var ASSETS = ["./", "./index.html", "./css/style.css", "./js/config.js", "./js/totp.js", "./js/app.js", "./manifest.json", "./assets/icons/favicon.svg"];
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(ASSETS); }).then(function () { return self.skipWaiting(); }));

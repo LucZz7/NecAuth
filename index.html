@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NecAuth - Professional Two-Factor Authentication</title>
-<meta name="description" content="NecAuth is a professional TOTP two-factor authenticator by NECXY DEVELOPER. Add a secret key and get real 6-digit login codes, generated locally on your device.">
+<title>NecAuth - Two-Factor Authenticator</title>
+<meta name="description" content="NecAuth - clean two-factor authenticator. Add a secret key, get real TOTP codes. By NECXY DEVELOPER.">
 <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0a0b">
@@ -15,7 +15,6 @@
 </head>
 <body>
 
-<!-- Premium SVG icon set (Lucide-style stroke icons + brand icons) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
@@ -28,283 +27,101 @@
     <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></symbol>
     <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5M12 3v12"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
-    <symbol id="i-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></symbol>
     <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3M21 21v.01M12 7v3a2 2 0 0 1-2 2H7M3 12h.01M12 3h.01M12 16v.01M16 12h1M21 12v.01M12 21v-1"/></symbol>
-    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
-    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
-    <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
-    <symbol id="i-fingerprint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M14 13.12c0-2.38 0-6.38-1-8.88"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M9 6.8a6 6 0 0 1 9 5.2c0 .47 0 1.17-.02 2"/></symbol>
-    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
-    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></symbol>
-    <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01M6 18h.01"/></symbol>
-    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/></symbol>
-    <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></symbol>
-    <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
     <symbol id="i-telegram" viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.63 18.9 18.95c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.19c-.25.25-.46.46-.95.46l.34-4.86 8.85-8c.38-.34-.08-.53-.6-.19l-10.94 6.89-4.71-1.47c-1.02-.32-1.04-1.02.21-1.51L20.6 3.2c.85-.32 1.6.19 1.34 1.43Z"/></symbol>
-    <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
-    <symbol id="i-youtube" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></symbol>
   </defs>
 </svg>
 
+<div class="orb orb-a"></div>
+<div class="orb orb-b"></div>
+
 <header class="header">
   <div class="header-inner">
-    <a class="brand" href="#top" aria-label="NecAuth home">
+    <a class="brand" href="#" aria-label="NecAuth">
       <span class="brand-mark"><svg><use href="#i-shield"/></svg></span>
-      <span><span class="brand-name">Nec<span>Auth</span></span><br><span class="brand-sub">2FA Security</span></span>
+      <span class="brand-name">Nec<span>Auth</span></span>
     </a>
-    <nav class="nav" id="mainNav">
-      <a href="#authenticator">Authenticator</a>
-      <a href="#tools">Tools</a>
-      <a href="#login">Login Demo</a>
-      <a href="#features">Features</a>
-      <a href="#buy">Buy Info</a>
-      <a href="#faq">FAQ</a>
-    </nav>
-    <div class="header-actions">
-      <!-- Owner Telegram: username is set in js/config.js, this button always opens the owner profile -->
-      <a class="tg-btn" id="headerTelegramBtn" href="https://t.me/i_necxy" target="_blank" rel="noopener" aria-label="Open owner Telegram profile">
-        <svg><use href="#i-telegram"/></svg><span class="tg-label" data-owner-telegram>@i_necxy</span>
-      </a>
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu"><svg><use href="#i-menu"/></svg></button>
-    </div>
+    <a class="tg-btn" id="headerTelegramBtn" href="https://t.me/i_necxy" target="_blank" rel="noopener" aria-label="Telegram - @i_necxy" title="@i_necxy on Telegram">
+      <svg><use href="#i-telegram"/></svg>
+    </a>
   </div>
 </header>
 
-<main id="top">
-  <!-- HERO -->
-  <section class="hero wrap">
-    <span class="kicker"><i></i> Real TOTP &middot; RFC 6238 Standard</span>
-    <h1>Two-Factor Authentication, <span class="grad">Done Professionally.</span></h1>
-    <p>Add a secret key and get real 6-digit login codes that refresh every 30 seconds - the same standard used by Google, GitHub, Instagram and every major platform. Generated locally on your device. Nothing is sent to a server.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="#authenticator"><svg><use href="#i-key"/></svg> Open Authenticator</a>
-      <a class="btn" href="https://t.me/i_necxy" target="_blank" rel="noopener" data-telegram-link><svg><use href="#i-telegram"/></svg> <span data-owner-telegram>@i_necxy</span> on Telegram</a>
-    </div>
-    <div class="stats">
-      <div class="stat glass"><b>30s</b><span>Code Refresh</span></div>
-      <div class="stat glass"><b>6-Digit</b><span>Real TOTP Codes</span></div>
-      <div class="stat glass"><b>100%</b><span>On-Device Privacy</span></div>
-      <div class="stat glass"><b>SHA-1</b><span>HMAC Algorithm</span></div>
-    </div>
+<main class="wrap">
+  <section class="intro anim-in">
+    <h1>Two-Factor <span class="grad">Authenticator</span></h1>
+    <p>Add a secret key. Get real login codes, every 30 seconds.</p>
   </section>
 
-  <!-- AUTHENTICATOR -->
-  <section class="section wrap" id="authenticator">
-    <div class="section-head">
-      <span class="kicker"><i></i> Authenticator Vault</span>
-      <h2>Your 2FA codes, in one secure place</h2>
-      <p>Add an account with its secret key, or paste a full otpauth link. Codes update automatically and a single tap copies them.</p>
-    </div>
-    <div class="auth-grid">
-      <form class="glass panel" id="addForm">
-        <h3><svg><use href="#i-plus"/></svg> Add Account</h3>
-        <p class="sub">Get the secret key from any site under its Security &gt; Two-Factor Authentication setup.</p>
-        <div class="field">
-          <label for="issuerInput">Issuer / Website Name</label>
-          <input class="input" id="issuerInput" type="text" placeholder="e.g. Google, GitHub, Instagram" autocomplete="off" required>
-        </div>
-        <div class="field">
-          <label for="accountInput">Account Name / Email</label>
-          <input class="input" id="accountInput" type="text" placeholder="e.g. yourname@gmail.com" autocomplete="off" required>
-        </div>
-        <div class="field">
-          <label for="secretInput">Secret Key (Base32)</label>
-          <input class="input mono" id="secretInput" type="text" placeholder="JBSWY3DPEHPK3PXP" autocomplete="off" spellcheck="false" required>
-          <p class="hint">Spaces are ignored. The key stays only in this browser - never uploaded anywhere.</p>
-        </div>
-        <div class="row2">
-          <div class="field">
-            <label for="digitsInput">Digits</label>
-            <select class="input" id="digitsInput"><option value="6" selected>6 digits</option><option value="7">7 digits</option><option value="8">8 digits</option></select>
-          </div>
-          <div class="field">
-            <label for="periodInput">Period</label>
-            <select class="input" id="periodInput"><option value="30" selected>30 seconds</option><option value="60">60 seconds</option></select>
-          </div>
-        </div>
-        <button class="btn btn-primary btn-block" type="submit"><svg><use href="#i-shield"/></svg> Save &amp; Start Generating</button>
-        <div class="divider">Or import</div>
-        <div class="field">
-          <label for="otpauthInput">Paste otpauth:// Link</label>
-          <input class="input mono" id="otpauthInput" type="text" placeholder="otpauth://totp/..." autocomplete="off" spellcheck="false" style="text-transform:none">
-        </div>
-        <button class="btn btn-block" type="button" id="importOtpauthBtn"><svg><use href="#i-qr"/></svg> Import From Link</button>
-      </form>
-
-      <div class="glass panel">
-        <div class="list-head">
-          <h3 style="display:flex;align-items:center;gap:10px"><svg width="21" height="21" style="color:#ff3b3b"><use href="#i-smartphone"/></svg> My Accounts <span id="accountCount" style="color:var(--muted2);font-size:14px;font-weight:600"></span></h3>
-          <div class="search"><svg><use href="#i-search"/></svg><input class="input" id="searchInput" type="text" placeholder="Search accounts..."></div>
-          <button class="icon-btn" id="exportBtn" title="Export backup (JSON)" aria-label="Export backup"><svg><use href="#i-download"/></svg></button>
-          <button class="icon-btn" id="importBtn" title="Import backup (JSON)" aria-label="Import backup"><svg><use href="#i-upload"/></svg></button>
-          <input type="file" id="importFile" accept="application/json" class="hidden">
-        </div>
-        <div class="accounts" id="accountsList"></div>
-        <div class="empty" id="emptyState">
-          <svg><use href="#i-lock"/></svg>
-          <b>No accounts yet</b>
-          Add your first account from the panel and its live code will appear here.
-        </div>
+  <form class="glass panel anim-in d1" id="addForm">
+    <div class="row2">
+      <div class="field">
+        <label for="issuerInput">Website</label>
+        <input class="input" id="issuerInput" type="text" placeholder="Google, GitHub, Instagram..." autocomplete="off" required>
+      </div>
+      <div class="field">
+        <label for="accountInput">Account</label>
+        <input class="input" id="accountInput" type="text" placeholder="Username or email" autocomplete="off" required>
       </div>
     </div>
-  </section>
-
-  <!-- TOOLS -->
-  <section class="section wrap" id="tools">
-    <div class="section-head">
-      <span class="kicker"><i></i> Useful Tools</span>
-      <h2>Everything a 2FA setup needs</h2>
-      <p>Verify a code against a secret, generate a fresh secret for your own app, and check your device clock - TOTP only works when the time is right.</p>
+    <div class="field">
+      <label for="secretInput">Secret Key</label>
+      <div class="secret-row">
+        <input class="input mono" id="secretInput" type="text" placeholder="JBSWY3DPEHPK3PXP" autocomplete="off" spellcheck="false" required>
+        <button class="btn btn-primary" type="submit"><svg><use href="#i-plus"/></svg> Add</button>
+      </div>
     </div>
-    <div class="tools-grid">
-      <div class="glass panel">
-        <h3><svg><use href="#i-check"/></svg> Verify a Code</h3>
-        <p class="sub">This is the exact check a real login performs on the server side - here it runs locally for testing any secret and code pair.</p>
-        <div class="field"><label for="verifySecret">Secret Key</label><input class="input mono" id="verifySecret" type="text" placeholder="Enter secret key" spellcheck="false" autocomplete="off"></div>
-        <div class="field"><label for="verifyCode">6-Digit Code</label><input class="input mono" id="verifyCode" type="text" inputmode="numeric" maxlength="8" placeholder="000000" autocomplete="one-time-code"></div>
-        <button class="btn btn-primary btn-block" id="verifyBtn" type="button"><svg><use href="#i-fingerprint"/></svg> Verify Code</button>
-        <div class="result" id="verifyResult"></div>
+    <details class="import-box">
+      <summary><svg><use href="#i-qr"/></svg> Import otpauth:// link</summary>
+      <div class="secret-row" style="margin-top:12px">
+        <input class="input mono" id="otpauthInput" type="text" placeholder="otpauth://totp/..." autocomplete="off" spellcheck="false" style="text-transform:none">
+        <button class="btn" type="button" id="importOtpauthBtn">Import</button>
       </div>
-      <div>
-        <div class="glass panel" style="margin-bottom:18px">
-          <h3><svg><use href="#i-refresh"/></svg> Generate New Secret</h3>
-          <p class="sub">Building your own login? Generate a cryptographically random secret and its ready-to-use otpauth link and QR code for enrollment.</p>
-          <div class="row2">
-            <div class="field"><label for="genIssuer">Issuer</label><input class="input" id="genIssuer" type="text" value="NecAuth" autocomplete="off"></div>
-            <div class="field"><label for="genAccount">Account</label><input class="input" id="genAccount" type="text" value="user@example.com" autocomplete="off"></div>
-          </div>
-          <button class="btn btn-block" id="genBtn" type="button"><svg><use href="#i-zap"/></svg> Generate Secret + QR</button>
-          <div class="result" id="genResult"></div>
-          <div class="qr-box" id="qrBox"><div class="qr-target" id="qrTarget"></div><p id="qrUrl"></p></div>
-        </div>
-        <div class="glass panel">
-          <h3><svg><use href="#i-clock"/></svg> Device Time Check</h3>
-          <p class="sub">TOTP codes are built from time. If your clock drifts, every code fails - check it here.</p>
-          <div class="big-clock" id="deviceClock">--:--:--</div>
-          <div class="status-line" style="margin-top:10px"><i></i><span id="timeStatus">Current period ends in <b id="periodLeft">--</b> seconds</span></div>
-        </div>
-      </div>
+    </details>
+  </form>
+
+  <section class="glass panel anim-in d2">
+    <div class="list-head">
+      <h2><svg><use href="#i-key"/></svg> My Codes <span id="accountCount"></span></h2>
+      <div class="search"><svg><use href="#i-search"/></svg><input class="input" id="searchInput" type="text" placeholder="Search"></div>
+      <button class="icon-btn" id="exportBtn" title="Backup" aria-label="Export backup"><svg><use href="#i-download"/></svg></button>
+      <button class="icon-btn" id="importBtn" title="Restore" aria-label="Import backup"><svg><use href="#i-upload"/></svg></button>
+      <input type="file" id="importFile" accept="application/json" class="hidden">
+    </div>
+    <div class="accounts" id="accountsList"></div>
+    <div class="empty" id="emptyState">
+      <svg><use href="#i-lock"/></svg>
+      <b>No accounts yet</b>
+      Add one above and its live code appears here.
     </div>
   </section>
 
-  <!-- LOGIN DEMO -->
-  <section class="section wrap" id="login">
-    <div class="section-head">
-      <span class="kicker"><i></i> Real Auth Login Demo</span>
-      <h2>See a full 2FA login, end to end</h2>
-      <p>Step 1 enrolls a demo account and stores its secret. Step 2 is the real login check: password first, then a live TOTP code verified exactly like a production server does.</p>
-    </div>
-    <div class="tools-grid">
-      <div class="glass panel">
-        <h3><svg><use href="#i-qr"/></svg> Step 1 - Enroll 2FA</h3>
-        <p class="sub">Creates a demo account with the password <span class="mono" style="font-family:var(--mono)">demo1234</span> and a fresh secret. The secret is added to your vault above, so the login code always comes from the authenticator itself.</p>
-        <button class="btn btn-block" id="enrollBtn" type="button"><svg><use href="#i-shield"/></svg> Enroll Demo Account</button>
-        <div class="result" id="enrollResult"></div>
-      </div>
-      <form class="glass panel" id="loginForm">
-        <h3><svg><use href="#i-lock"/></svg> Step 2 - Login With 2FA</h3>
-        <p class="sub">Username: <span style="font-family:var(--mono)">demo</span> &middot; Password: <span style="font-family:var(--mono)">demo1234</span> &middot; Then enter the current NecAuth Demo code from your vault.</p>
-        <div class="field"><label for="loginUser">Username</label><input class="input" id="loginUser" type="text" value="demo" autocomplete="username"></div>
-        <div class="field"><label for="loginPass">Password</label><input class="input" id="loginPass" type="password" placeholder="Enter password" autocomplete="current-password"></div>
-        <div class="field"><label for="loginCode">Authenticator Code</label><input class="input mono" id="loginCode" type="text" inputmode="numeric" maxlength="8" placeholder="6-digit code" autocomplete="one-time-code"></div>
-        <button class="btn btn-primary btn-block" type="submit"><svg><use href="#i-fingerprint"/></svg> Login Securely</button>
-        <div class="result" id="loginResult"></div>
-      </form>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="section wrap" id="features">
-    <div class="section-head">
-      <span class="kicker"><i></i> Features</span>
-      <h2>Built like a product, not a demo</h2>
-      <p>Every option below is live and working in this website right now.</p>
-    </div>
-    <div class="cards">
-      <div class="glass card"><div class="ic"><svg><use href="#i-zap"/></svg></div><h3>Live TOTP Engine</h3><p>Real RFC 6238 codes with HMAC-SHA-1, auto-refresh every period and a countdown ring on every account.</p></div>
-      <div class="glass card"><div class="ic"><svg><use href="#i-lock"/></svg></div><h3>Private by Design</h3><p>Secrets are stored only in your browser local storage and codes are computed on-device. No server, no tracking, no upload.</p></div>
-      <div class="glass card"><div class="ic"><svg><use href="#i-qr"/></svg></div><h3>otpauth Import + QR</h3><p>Paste any standard otpauth:// link to import an account instantly, and generate enrollment QR codes for your own apps.</p></div>
-      <div class="glass card"><div class="ic"><svg><use href="#i-copy"/></svg></div><h3>One-Tap Copy</h3><p>Tap any code to copy it in the grouped format login forms expect, with instant confirmation feedback.</p></div>
-      <div class="glass card"><div class="ic"><svg><use href="#i-download"/></svg></div><h3>Backup &amp; Restore</h3><p>Export the full vault as a JSON file and restore it on any device in seconds. Your accounts move with you.</p></div>
-      <div class="glass card"><div class="ic"><svg><use href="#i-globe"/></svg></div><h3>Works Offline (PWA)</h3><p>Install it like an app and open it without internet. Time-based codes never needed a connection in the first place.</p></div>
-    </div>
-  </section>
-
-  <!-- BUY INFO -->
-  <section class="section wrap" id="buy">
-    <div class="glass buy">
-      <div>
-        <span class="kicker"><i></i> Buy Info</span>
-        <h2>Want this system for your own project?</h2>
-        <p>Buy Info: For the premium version, a custom-branded build, or a full login + 2FA system integrated into your own website or app, contact the developer directly on Telegram. Pricing, delivery time and source code details are shared on chat.</p>
-        <ul class="buy-list">
-          <li><svg><use href="#i-check"/></svg> Full source code with all folders, ready to host anywhere</li>
-          <li><svg><use href="#i-check"/></svg> Your own branding, logo and Telegram / social links set up</li>
-          <li><svg><use href="#i-check"/></svg> Optional backend login system with database and admin setup</li>
-        </ul>
-      </div>
-      <div class="glass buy-card">
-        <div class="ic"><svg><use href="#i-telegram"/></svg></div>
-        <div class="handle" data-owner-telegram>@i_necxy</div>
-        <p>Developer on Telegram - tap below to open the profile and message directly.</p>
-        <a class="btn btn-primary btn-block" href="https://t.me/i_necxy" target="_blank" rel="noopener" data-telegram-link><svg><use href="#i-send"/></svg> Message on Telegram</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section class="section wrap" id="faq">
-    <div class="section-head">
-      <span class="kicker"><i></i> FAQ</span>
-      <h2>Common questions</h2>
-    </div>
-    <div class="faq">
-      <details class="glass"><summary>Are these codes real - will they work on actual websites?<svg><use href="#i-plus"/></svg></summary><p>Yes. NecAuth uses the standard TOTP algorithm (RFC 6238) with the same secret key a site gave you, so the code matches what that site expects - identical to Google Authenticator for the same key and time.</p></details>
-      <details class="glass"><summary>Where is my secret key stored?<svg><use href="#i-plus"/></svg></summary><p>Only in this browser, in local storage on your own device. It is never sent to any server. Clearing browser data for this site removes the vault, so keep a JSON backup from the export button.</p></details>
-      <details class="glass"><summary>My codes are being rejected. What is wrong?<svg><use href="#i-plus"/></svg></summary><p>In almost every case it is the device clock. Enable automatic date and time in your phone settings, re-check with the Device Time Check tool above, and make sure the secret key was copied without missing characters.</p></details>
-      <details class="glass"><summary>Can I add this login system to my own app?<svg><use href="#i-plus"/></svg></summary><p>Yes - the Generate New Secret tool creates the same enrollment data a backend needs. For a complete server-side integration with user accounts, see the Buy Info section and contact the developer on Telegram.</p></details>
-    </div>
-  </section>
+  <p class="note anim-in d3"><svg><use href="#i-lock"/></svg> Keys stay on this device only. Nothing is uploaded.</p>
 </main>
 
 <footer>
-  <div class="footer-inner">
-    <div>
-      <a class="brand" href="#top"><span class="brand-mark"><svg><use href="#i-shield"/></svg></span><span><span class="brand-name">Nec<span>Auth</span></span><br><span class="brand-sub">2FA Security</span></span></a>
-      <p>Professional two-factor authentication for everyone. Real TOTP codes, generated locally, with a login flow you can test end to end.</p>
-    </div>
-    <div class="socials">
-      <a href="https://t.me/i_necxy" target="_blank" rel="noopener" data-telegram-link aria-label="Telegram"><svg><use href="#i-telegram"/></svg></a>
-      <a href="https://instagram.com/i_necxy" target="_blank" rel="noopener" aria-label="Instagram"><svg><use href="#i-instagram"/></svg></a>
-      <a href="https://youtube.com/@voidnecx" target="_blank" rel="noopener" aria-label="YouTube"><svg><use href="#i-youtube"/></svg></a>
-    </div>
-  </div>
-  <div class="credit">Developed by <b>NECXY DEVELOPER</b> &middot; Telegram <span data-owner-telegram>@i_necxy</span></div>
+  <span>Developed by <b>NECXY DEVELOPER</b></span>
+  <a href="https://t.me/i_necxy" target="_blank" rel="noopener" data-telegram-link><svg><use href="#i-telegram"/></svg> <span data-owner-telegram>@i_necxy</span></a>
 </footer>
 
-<!-- Edit modal -->
 <div class="modal-backdrop" id="editBackdrop">
   <form class="glass modal" id="editForm">
     <h3>Edit Account</h3>
-    <p>Update the details. Changing the secret key changes every future code.</p>
     <input type="hidden" id="editId">
-    <div class="field"><label for="editIssuer">Issuer / Website Name</label><input class="input" id="editIssuer" required></div>
-    <div class="field"><label for="editAccount">Account Name / Email</label><input class="input" id="editAccount" required></div>
-    <div class="field"><label for="editSecret">Secret Key (Base32)</label><input class="input mono" id="editSecret" required spellcheck="false"></div>
+    <div class="field"><label for="editIssuer">Website</label><input class="input" id="editIssuer" required></div>
+    <div class="field"><label for="editAccount">Account</label><input class="input" id="editAccount" required></div>
+    <div class="field"><label for="editSecret">Secret Key</label><input class="input mono" id="editSecret" required spellcheck="false"></div>
     <div class="modal-actions">
       <button class="btn" type="button" id="editCancel">Cancel</button>
-      <button class="btn btn-primary" type="submit">Save Changes</button>
+      <button class="btn btn-primary" type="submit">Save</button>
     </div>
   </form>
 </div>
 
-<!-- Delete modal -->
 <div class="modal-backdrop" id="deleteBackdrop">
   <div class="glass modal">
-    <h3>Delete this account?</h3>
-    <p id="deleteText">This removes the account and its secret key from this device permanently.</p>
+    <h3>Delete account?</h3>
+    <p id="deleteText">This removes the account and its key from this device.</p>
     <div class="modal-actions">
       <button class="btn" id="deleteCancel" type="button">Cancel</button>
       <button class="btn btn-primary" id="deleteConfirm" type="button">Delete</button>
@@ -316,7 +133,6 @@
 
 <script src="js/config.js"></script>
 <script src="js/totp.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
