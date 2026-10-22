@@ -59,12 +59,72 @@
     return new Uint8Array(buf);
   }
 
-  async function hotp(secretBase32, counter, digits) {
+  /* Pure-JS SHA-1 + HMAC-SHA-1 fallback. Web Crypto (crypto.subtle) only
+     exists in secure contexts (HTTPS / localhost); on plain HTTP, file://
+     or restricted webviews it is undefined and code generation would
+     silently fail. This fallback keeps keys working everywhere. */
+  function sha1Js(input) {
+    var ml = input.length;
+    var paddedLen = (((ml + 8) >> 6) + 1) << 6;
+    var buf = new Uint8Array(paddedLen);
+    buf.set(input);
+    buf[ml] = 0x80;
+    var dv = new DataView(buf.buffer);
+    dv.setUint32(paddedLen - 4, (ml * 8) >>> 0, false);
+    dv.setUint32(paddedLen - 8, Math.floor(ml / 536870912), false);
+    var h0 = 0x67452301, h1 = 0xefcdab89, h2 = 0x98badcfe, h3 = 0x10325476, h4 = 0xc3d2e1f0;
+    var w = new Int32Array(80);
+    for (var chunk = 0; chunk < paddedLen; chunk += 64) {
+      var i, x;
+      for (i = 0; i < 16; i++) w[i] = dv.getInt32(chunk + i * 4, false);
+      for (i = 16; i < 80; i++) { x = w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16]; w[i] = (x << 1) | (x >>> 31); }
+      var a = h0, b = h1, c = h2, d = h3, e = h4;
+      for (i = 0; i < 80; i++) {
+        var f, k;
+        if (i < 20) { f = (b & c) | (~b & d); k = 0x5a827999; }
+        else if (i < 40) { f = b ^ c ^ d; k = 0x6ed9eba1; }
+        else if (i < 60) { f = (b & c) | (b & d) | (c & d); k = 0x8f1bbcdc; }
+        else { f = b ^ c ^ d; k = 0xca62c1d6; }
+        var tmp = (((a << 5) | (a >>> 27)) + f + e + k + w[i]) | 0;
+        e = d; d = c; c = (b << 30) | (b >>> 2); b = a; a = tmp;
+      }
+      h0 = (h0 + a) | 0; h1 = (h1 + b) | 0; h2 = (h2 + c) | 0; h3 = (h3 + d) | 0; h4 = (h4 + e) | 0;
+    }
+    var out = new Uint8Array(20);
+    var odv = new DataView(out.buffer);
+    odv.setInt32(0, h0, false); odv.setInt32(4, h1, false); odv.setInt32(8, h2, false); odv.setInt32(12, h3, false); odv.setInt32(16, h4, false);
+    return out;
+  }
+
+  function hmacSha1Js(keyBytes, msgBytes) {
+    var key = keyBytes.length > 64 ? sha1Js(keyBytes) : keyBytes;
+    var block = new Uint8Array(64);
+    block.set(key);
+    var ipad = new Uint8Array(64), opad = new Uint8Array(64);
+    for (var i = 0; i < 64; i++) { ipad[i] = block[i] ^ 0x36; opad[i] = block[i] ^ 0x5c; }
+    var inner = new Uint8Array(64 + msgBytes.length);
+    inner.set(ipad); inner.set(msgBytes, 64);
+    var innerHash = sha1Js(inner);
+    var outer = new Uint8Array(64 + innerHash.length);
+    outer.set(opad); outer.set(innerHash, 64);
+    return sha1Js(outer);
+  }
+
+  async function hotp(secretBase32, counter, digits, algorithm) {
     var keyBytes = base32Decode(secretBase32);
-    var key = await crypto.subtle.importKey(
-      "raw", keyBytes, { name: "HMAC", hash: "SHA-1" }, false, ["sign"]
-    );
-    var sig = new Uint8Array(await crypto.subtle.sign("HMAC", key, counterBytes(counter)));
+    var msg = counterBytes(counter);
+    var algo = String(algorithm || "SHA1").toUpperCase().replace(/-/g, "");
+    var sig;
+    if (global.crypto && crypto.subtle && crypto.subtle.importKey) {
+      var hashName = algo === "SHA256" ? "SHA-256" : algo === "SHA512" ? "SHA-512" : "SHA-1";
+      var key = await crypto.subtle.importKey(
+        "raw", keyBytes, { name: "HMAC", hash: hashName }, false, ["sign"]
+      );
+      sig = new Uint8Array(await crypto.subtle.sign("HMAC", key, msg));
+    } else {
+      if (algo !== "SHA1") throw new Error("This key needs the secure (HTTPS) version of this page.");
+      sig = hmacSha1Js(keyBytes, msg);
+    }
     var offset = sig[sig.length - 1] & 0x0f;
     var binary =
       ((sig[offset] & 0x7f) << 24) |
@@ -80,7 +140,7 @@
     var period = opts.period || 30;
     var timestamp = opts.timestamp != null ? opts.timestamp : Date.now();
     var counter = Math.floor(timestamp / 1000 / period);
-    return hotp(secretBase32, counter, opts.digits || 6);
+    return hotp(secretBase32, counter, opts.digits || 6, opts.algorithm);
   }
 
   async function verify(secretBase32, userCode, options) {
@@ -92,7 +152,7 @@
     if (!/^\d+$/.test(clean) || clean.length !== digits) return false;
     var counter = Math.floor(Date.now() / 1000 / period);
     for (var w = -windowSize; w <= windowSize; w++) {
-      var expected = await hotp(secretBase32, counter + w, digits);
+      var expected = await hotp(secretBase32, counter + w, digits, opts.algorithm);
       if (expected === clean) return true;
     }
     return false;
@@ -128,7 +188,8 @@
       account: account || issuer || "Account",
       secret: normalizeSecret(secret),
       digits: parseInt(params.get("digits") || "6", 10) || 6,
-      period: parseInt(params.get("period") || "30", 10) || 30
+      period: parseInt(params.get("period") || "30", 10) || 30,
+      algorithm: String(params.get("algorithm") || "SHA1").toUpperCase()
     };
   }
 
@@ -137,7 +198,7 @@
     var p = new URLSearchParams({
       secret: normalizeSecret(entry.secret),
       issuer: entry.issuer,
-      algorithm: "SHA1",
+      algorithm: String(entry.algorithm || "SHA1").toUpperCase(),
       digits: String(entry.digits || 6),
       period: String(entry.period || 30)
     });

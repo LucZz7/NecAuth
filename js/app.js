@@ -1,5 +1,8 @@
-/* NecAuth v5 - generator only. Straight code display, premium copy animation.
-   No verify, no extra tools. Saved accounts stay on this device only. */
+/* NecAuth v10 - generator only. Straight code display, premium copy animation.
+   Key handling: paste button fetches the key from the clipboard (with an
+   on-screen hint if the browser blocks it), any paste into the box
+   auto-generates, and full otpauth:// links are understood. All
+   user-facing text is 100% English. Saved accounts stay on this device. */
 (function () {
   "use strict";
   var T = window.NecTOTP;
@@ -77,39 +80,60 @@
   var currentSecret = null;
   var currentPeriodKey = null;
   var currentCode = "";
+  var currentDigits = 6;
+  var currentPeriod = PERIOD;
+  var currentAlgorithm = "SHA1";
 
   async function updateCode() {
     if (!currentSecret) return;
     $("timeChip").textContent = new Date().toLocaleTimeString("en-GB");
-    var remain = T.secondsRemaining(PERIOD);
+    var remain = T.secondsRemaining(currentPeriod);
     $("secondsLeft").textContent = remain;
-    $("timeBar").style.width = (remain / PERIOD) * 100 + "%";
-    var periodKey = Math.floor(Date.now() / 1000 / PERIOD);
+    $("timeBar").style.width = (remain / currentPeriod) * 100 + "%";
+    var periodKey = Math.floor(Date.now() / 1000 / currentPeriod);
     if (periodKey === currentPeriodKey) return;
     currentPeriodKey = periodKey;
     try {
-      currentCode = await T.totp(currentSecret, { digits: 6, period: PERIOD });
+      currentCode = await T.totp(currentSecret, { digits: currentDigits, period: currentPeriod, algorithm: currentAlgorithm });
       $("codeText").innerHTML = digitHTML(currentCode);
     } catch (e) {}
   }
 
   async function generate() {
-    var raw = $("secretInput").value;
-    if (!raw.trim()) { showError("Pehle apni 2FA secret key daalo."); return; }
+    var raw = $("secretInput").value.trim();
+    if (!raw) { showError("Enter your 2FA secret key first."); return; }
     try {
-      var secret = T.normalizeSecret(raw);
-      T.base32Decode(secret);
-      currentSecret = secret;
+      var digits = 6, period = PERIOD, algorithm = "SHA1";
+      if (/^otpauth:\/\//i.test(raw)) {
+        var parsed = T.parseOtpauth(raw);
+        currentSecret = parsed.secret;
+        digits = parsed.digits;
+        period = parsed.period;
+        algorithm = parsed.algorithm || "SHA1";
+        $("secretInput").value = parsed.secret;
+        var label = (parsed.issuer && parsed.issuer !== "Account") ? parsed.issuer : (parsed.account || "");
+        if (label && !$("saveName").value) $("saveName").value = label;
+      } else {
+        currentSecret = T.normalizeSecret(raw);
+      }
+      T.base32Decode(currentSecret);
+      currentDigits = digits;
+      currentPeriod = period;
+      currentAlgorithm = algorithm;
       currentPeriodKey = null;
+      currentCode = "";
       showError("");
       $("qrPanel").classList.add("hidden");
       $("resultBox").classList.add("show");
       $("saveRow").classList.remove("hidden");
       await updateCode();
+      if (!currentCode) showError("Could not generate a code from this key. Check the key and try again.");
     } catch (err) {
       currentSecret = null;
       $("resultBox").classList.remove("show");
-      showError("Ye secret key valid nahi hai. Sahi Base32 key daalo.");
+      showError(/^otpauth:\/\//i.test(raw)
+        ? "This otpauth link could not be read. Paste only the secret key."
+        : "This secret key is not valid. Enter a correct Base32 secret key.");
     }
   }
 
@@ -117,11 +141,30 @@
   $("secretInput").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); generate(); } });
   setInterval(updateCode, 500);
 
+  /* Fetch the key from the clipboard. Some browsers/webviews block
+     clipboard reads; then focus the box and say exactly what to do
+     instead of failing silently. */
   $("pasteBtn").addEventListener("click", async function () {
+    var text = "";
     try {
-      var text = await navigator.clipboard.readText();
-      if (text) { $("secretInput").value = text.trim(); generate(); }
-    } catch (e) { $("secretInput").focus(); }
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        text = await navigator.clipboard.readText();
+      }
+    } catch (e) { text = ""; }
+    if (text && text.trim()) {
+      $("secretInput").value = text.trim();
+      showError("");
+      generate();
+    } else {
+      $("secretInput").focus();
+      showError("Could not fetch the key automatically. Long-press the box and tap Paste.");
+    }
+  });
+
+  /* Any paste into the key box (button or long-press) fetches the key
+     and generates the code right away. */
+  $("secretInput").addEventListener("paste", function () {
+    setTimeout(generate, 0);
   });
 
   $("codeCard").addEventListener("click", function () {
@@ -164,7 +207,7 @@
       var cached = savedCache[a.id];
       if (!cached || cached.periodKey !== periodKey) {
         try {
-          var code = await T.totp(a.secret, { digits: a.digits || 6, period: a.period || 30 });
+          var code = await T.totp(a.secret, { digits: a.digits || 6, period: a.period || 30, algorithm: a.algorithm || "SHA1" });
           var changed = !cached || cached.code !== code;
           savedCache[a.id] = { periodKey: periodKey, code: code };
           var el = document.querySelector('[data-saved-code="' + a.id + '"]');
@@ -179,7 +222,7 @@
     if (!currentSecret) return;
     var name = $("saveName").value.trim() || "Account";
     var list = loadVault();
-    list.unshift({ id: uid(), issuer: name, account: "", secret: currentSecret, digits: 6, period: PERIOD, createdAt: Date.now() });
+    list.unshift({ id: uid(), issuer: name, account: "", secret: currentSecret, digits: currentDigits, period: currentPeriod, algorithm: currentAlgorithm, createdAt: Date.now() });
     saveVault(list);
     $("saveName").value = "";
     $("saveRow").classList.add("hidden");
@@ -192,7 +235,7 @@
     var panel = $("qrPanel");
     if (!panel.classList.contains("hidden")) { panel.classList.add("hidden"); return; }
     var name = $("saveName").value.trim() || "NecAuth";
-    var url = T.buildOtpauthUrl({ issuer: "NecAuth", account: name, secret: currentSecret, digits: 6, period: PERIOD });
+    var url = T.buildOtpauthUrl({ issuer: "NecAuth", account: name, secret: currentSecret, digits: currentDigits, period: currentPeriod, algorithm: currentAlgorithm });
     var target = $("qrTarget");
     target.innerHTML = "";
     try {
@@ -264,7 +307,7 @@
       pendingDeleteId = delBtn.getAttribute("data-saved-del");
       var entry = loadVault().find(function (a) { return a.id === pendingDeleteId; });
       $("deleteText").textContent = entry
-        ? "Delete " + entry.issuer + "? Iska secret key is device se permanently hat jayega."
+        ? "Delete " + entry.issuer + "? Its secret key will be permanently removed from this device."
         : "This will remove the account and its secret key from this device.";
       $("deleteBackdrop").classList.add("open");
       return;
