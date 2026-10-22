@@ -67,6 +67,7 @@
 
   async function updateCode() {
     if (!currentSecret) return;
+    $("timeChip").textContent = new Date().toLocaleTimeString("en-GB");
     var remain = T.secondsRemaining(PERIOD);
     $("secondsLeft").textContent = remain;
     $("timeBar").style.width = (remain / PERIOD) * 100 + "%";
@@ -88,6 +89,7 @@
       currentSecret = secret;
       currentPeriodKey = null;
       showError("");
+      $("qrPanel").classList.add("hidden");
       $("resultBox").classList.add("show");
       $("saveRow").classList.remove("hidden");
       await updateCode();
@@ -171,13 +173,87 @@
     renderSaved();
     refreshSaved();
   });
+  /* QR for the current key */
+  $("qrBtn").addEventListener("click", function () {
+    if (!currentSecret) return;
+    var panel = $("qrPanel");
+    if (!panel.classList.contains("hidden")) { panel.classList.add("hidden"); return; }
+    var name = $("saveName").value.trim() || "NecAuth";
+    var url = T.buildOtpauthUrl({ issuer: "NecAuth", account: name, secret: currentSecret, digits: 6, period: PERIOD });
+    var target = $("qrTarget");
+    target.innerHTML = "";
+    try {
+      if (typeof qrcode !== "undefined") {
+        var qr = qrcode(0, "M");
+        qr.addData(url);
+        qr.make();
+        target.innerHTML = qr.createSvgTag({ cellSize: 5, margin: 6, scalable: true });
+        var svg = target.querySelector("svg");
+        if (svg) { svg.setAttribute("width", "168"); svg.setAttribute("height", "168"); }
+      } else target.textContent = "QR unavailable offline";
+    } catch (err) { target.textContent = "QR unavailable"; }
+    panel.classList.remove("hidden");
+  });
+
+  /* Backup export / import */
+  $("exportBtn").addEventListener("click", function () {
+    var blob = new Blob([JSON.stringify({ app: "NecAuth", version: 7, exportedAt: new Date().toISOString(), accounts: loadVault() }, null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "necauth-backup.json";
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+  });
+  $("importBtn").addEventListener("click", function () { $("importFile").click(); });
+  $("importFile").addEventListener("change", function () {
+    var file = $("importFile").files[0];
+    if (!file) return;
+    file.text().then(function (text) {
+      try {
+        var parsed = JSON.parse(text);
+        var incoming = Array.isArray(parsed) ? parsed : parsed.accounts;
+        if (!Array.isArray(incoming)) throw new Error("bad file");
+        var clean = incoming.map(function (a) {
+          var secret = T.normalizeSecret(a.secret);
+          T.base32Decode(secret);
+          return { id: uid(), issuer: String(a.issuer || "Account"), account: String(a.account || ""), secret: secret, digits: a.digits || 6, period: a.period || 30, createdAt: Date.now() };
+        });
+        saveVault(clean.concat(loadVault()));
+        renderSaved();
+        refreshSaved();
+      } catch (err) {}
+      $("importFile").value = "";
+    });
+  });
+
+  /* Delete with confirmation + slide-out animation */
+  var pendingDeleteId = null;
+  $("deleteCancel").addEventListener("click", function () { $("deleteBackdrop").classList.remove("open"); pendingDeleteId = null; });
+  $("deleteBackdrop").addEventListener("click", function (e) { if (e.target === $("deleteBackdrop")) { $("deleteBackdrop").classList.remove("open"); pendingDeleteId = null; } });
+  $("deleteConfirm").addEventListener("click", function () {
+    var id = pendingDeleteId;
+    $("deleteBackdrop").classList.remove("open");
+    pendingDeleteId = null;
+    if (!id) return;
+    var item = document.querySelector('[data-saved-item="' + id + '"]');
+    function doRemove() {
+      saveVault(loadVault().filter(function (a) { return a.id !== id; }));
+      delete savedCache[id];
+      renderSaved();
+    }
+    if (item) { item.classList.add("removing"); setTimeout(doRemove, 370); }
+    else doRemove();
+  });
+
   $("savedList").addEventListener("click", async function (e) {
     var delBtn = e.target.closest("[data-saved-del]");
     if (delBtn) {
-      var delId = delBtn.getAttribute("data-saved-del");
-      saveVault(loadVault().filter(function (a) { return a.id !== delId; }));
-      delete savedCache[delId];
-      renderSaved();
+      pendingDeleteId = delBtn.getAttribute("data-saved-del");
+      var entry = loadVault().find(function (a) { return a.id === pendingDeleteId; });
+      $("deleteText").textContent = entry
+        ? "Delete " + entry.issuer + "? Iska secret key is device se permanently hat jayega."
+        : "This will remove the account and its secret key from this device.";
+      $("deleteBackdrop").classList.add("open");
       return;
     }
     var copyEl = e.target.closest("[data-saved-copy],[data-saved-code]");

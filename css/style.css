@@ -118,6 +118,46 @@ button,input{font:inherit;color:inherit}
 .saved-item.copied{border-color:rgba(255,59,59,.8);box-shadow:0 0 0 3px rgba(224,49,49,.18);transition:.25s}
 .saved-item.copied .mini-btn[data-saved-copy]{background:linear-gradient(135deg,var(--red2),var(--red-dark));color:#fff;border-color:transparent}
 
+/* Time chip, QR, tiles, modal (v7) */
+.d2{animation-delay:.2s}
+.time-chip{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:11px;font-size:12.5px;color:var(--muted2);font-family:var(--mono)}
+.time-chip svg{width:14px;height:14px}
+.time-chip .dot{width:8px;height:8px;border-radius:50%;background:#40c778;box-shadow:0 0 10px #40c778;animation:dotPulse 1.8s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.65}}
+.pill{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 18px;border-radius:99px;border:1px solid var(--border);background:rgba(255,255,255,.06);font-weight:700;font-size:13.5px;cursor:pointer;transition:.25s}
+.pill:hover{border-color:var(--border-red);background:rgba(224,49,49,.13);transform:translateY(-1px)}
+.pill svg{width:16px;height:16px}
+.qr-panel{margin-top:16px;animation:rise .4s ease both}
+.qr-panel .qr-target{display:inline-grid;place-items:center;background:#fff;padding:13px;border-radius:14px;min-width:172px;min-height:172px}
+.qr-panel p{font-size:12.5px;color:var(--muted2);margin-top:9px}
+.saved-head .saved-tools{margin-left:auto;display:flex;gap:8px}
+.icon-btn{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;border:1px solid var(--border);background:rgba(255,255,255,.05);cursor:pointer;transition:.2s}
+.icon-btn:hover{border-color:var(--border-red);background:rgba(224,49,49,.13);transform:translateY(-1px)}
+.icon-btn svg{width:16px;height:16px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:460px}
+.tile{padding:16px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--muted);text-align:center;transition:.25s}
+.tile:hover{transform:translateY(-3px);border-color:rgba(255,59,59,.4)}
+.tile svg{width:21px;height:21px;color:#ff6b6b}
+.saved-item.removing{animation:slideOut .38s ease forwards}
+@keyframes slideOut{to{opacity:0;transform:translateX(46px) scale(.97)}}
+.modal-backdrop{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:none;place-items:center;padding:18px}
+.modal-backdrop.open{display:grid;animation:fadeIn .25s ease both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{width:100%;max-width:380px;padding:28px 26px;text-align:center;border-radius:22px;animation:modalPop .38s cubic-bezier(.2,.9,.3,1.25) both}
+@keyframes modalPop{from{opacity:0;transform:scale(.86) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-icon{width:54px;height:54px;margin:0 auto 14px;border-radius:16px;display:grid;place-items:center;background:rgba(224,49,49,.15);border:1px solid var(--border-red);color:#ff6b6b}
+.modal-icon svg{width:25px;height:25px}
+.modal h3{font-size:19px;font-weight:800;margin-bottom:8px}
+.modal p{color:var(--muted);font-size:14px;margin-bottom:20px}
+.modal-actions{display:flex;gap:10px}
+.btn-ghost,.btn-danger{flex:1;padding:12px;border-radius:12px;font-weight:700;font-size:14.5px;cursor:pointer;transition:.2s}
+.btn-ghost{border:1px solid var(--border);background:rgba(255,255,255,.06)}
+.btn-ghost:hover{border-color:rgba(255,255,255,.3)}
+.btn-danger{border:1px solid rgba(255,255,255,.18);background:linear-gradient(135deg,var(--red2),var(--red-dark));color:#fff;box-shadow:0 10px 24px rgba(224,49,49,.35)}
+.btn-danger:hover{transform:translateY(-1px)}
+.btn-danger:active,.btn-ghost:active{transform:scale(.97)}
+@media(max-width:480px){.tiles{grid-template-columns:repeat(3,1fr);gap:9px}.tile{font-size:11px;padding:13px 6px}}
+
 footer{text-align:center;padding:22px 20px 26px;border-top:1px solid var(--border);background:rgba(0,0,0,.4);backdrop-filter:blur(14px);display:grid;gap:3px}
 footer p{font-size:13.5px;color:var(--muted2)}
 footer .f-line1{font-size:14px;color:var(--muted)}
