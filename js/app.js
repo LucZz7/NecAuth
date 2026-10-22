@@ -42,15 +42,22 @@
     if (msg) el.classList.add("show");
   }
 
-  /* Premium copy feedback: card glow + sweep + Copied overlay */
-  function copyFeedback(cardEl, rawCode, groupedText) {
-    return navigator.clipboard.writeText(groupedText).then(function () {
-      cardEl.classList.add("copied");
-      setTimeout(function () { cardEl.classList.remove("copied"); }, 1450);
-    }).catch(function () {
-      cardEl.classList.add("copied");
-      setTimeout(function () { cardEl.classList.remove("copied"); }, 1450);
-    });
+  /* Premium copy feedback: soft glow + shine sweep + small corner icon
+     morphs to a check with a tiny Copied chip. Nothing big in the center. */
+  function flashCopied(cardEl, btnEl) {
+    cardEl.classList.add("copied");
+    var useEl = btnEl ? btnEl.querySelector("use") : null;
+    var oldHref = useEl ? useEl.getAttribute("href") : null;
+    if (useEl) useEl.setAttribute("href", "#i-check");
+    setTimeout(function () {
+      cardEl.classList.remove("copied");
+      if (useEl && oldHref) useEl.setAttribute("href", oldHref);
+    }, 1400);
+  }
+  function copyFeedback(cardEl, rawCode, groupedText, btnEl) {
+    return navigator.clipboard.writeText(groupedText)
+      .then(function () { flashCopied(cardEl, btnEl); })
+      .catch(function () { flashCopied(cardEl, btnEl); });
   }
 
   /* ----- Generator ----- */
@@ -104,7 +111,7 @@
 
   $("codeCard").addEventListener("click", function () {
     if (!currentSecret || !currentCode) return;
-    copyFeedback($("codeCard"), currentCode, groupCode(currentCode));
+    copyFeedback($("codeCard"), currentCode, groupCode(currentCode), $("copyBtn"));
   });
 
   /* ----- Saved accounts ----- */
@@ -179,7 +186,8 @@
     var cached = savedCache[id];
     if (!cached || !cached.code || cached.code === "ERROR") return;
     var item = document.querySelector('[data-saved-item="' + id + '"]');
-    if (item) copyFeedback(item, cached.code, groupCode(cached.code));
+    var btn = document.querySelector('[data-saved-copy="' + id + '"]');
+    if (item) copyFeedback(item, cached.code, groupCode(cached.code), btn);
   });
 
   renderSaved();

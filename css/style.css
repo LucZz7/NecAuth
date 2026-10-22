@@ -70,23 +70,23 @@ button,input{font:inherit;color:inherit}
 /* Result: straight code card (no circle) */
 .result{display:none;margin-top:22px}
 .result.show{display:block}
-.code-card{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:14px;padding:20px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));cursor:pointer;transition:border-color .3s,box-shadow .3s}
+.code-card{position:relative;overflow:hidden;padding:24px 16px 22px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));cursor:pointer;transition:border-color .3s,box-shadow .3s;text-align:center}
 .code-card:hover{border-color:rgba(255,59,59,.5)}
-.code{font-family:var(--mono);font-size:38px;font-weight:700;letter-spacing:.1em;line-height:1.1;display:flex;gap:.06em}
+.code{font-family:var(--mono);font-size:38px;font-weight:700;letter-spacing:.1em;line-height:1.1;display:flex;gap:.06em;justify-content:center}
 .code .d{display:inline-block;animation:digitIn .5s cubic-bezier(.2,.8,.25,1) both}
 .code .sp{width:.55em}
-.copy-ic{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);flex-shrink:0;transition:.25s}
-.copy-ic svg{width:16px;height:16px}
-.code-card:hover .copy-ic{color:#fff;border-color:var(--border-red)}
-/* Premium copy animation: sweep + glow + check overlay */
-.code-card .sweep{position:absolute;top:0;bottom:0;width:45%;left:0;transform:translateX(-140%) skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);pointer-events:none}
-.code-card.copied{border-color:rgba(255,59,59,.85);box-shadow:0 0 0 3px rgba(224,49,49,.2),0 14px 38px rgba(224,49,49,.3)}
+/* Small copy button - top-right corner only, never in the center */
+.copy-btn{position:absolute;top:9px;right:9px;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--muted);cursor:pointer;transition:.25s;z-index:2}
+.copy-btn:hover{color:#fff;border-color:var(--border-red);background:rgba(224,49,49,.16)}
+.copy-btn svg{width:14px;height:14px;pointer-events:none}
+.copy-btn:active{transform:scale(.92)}
+.copy-chip{position:absolute;top:calc(100% + 6px);right:-2px;padding:3px 9px;border-radius:99px;background:linear-gradient(135deg,var(--red2),var(--red-dark));color:#fff;font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;opacity:0;transform:translateY(-4px);transition:.3s cubic-bezier(.2,.8,.25,1);pointer-events:none;box-shadow:0 8px 18px rgba(224,49,49,.4)}
+/* Premium copy feedback: sweep + soft glow + icon morphs to check + tiny chip */
+.code-card .sweep{position:absolute;top:0;bottom:0;width:45%;left:0;transform:translateX(-140%) skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.26),transparent);pointer-events:none}
+.code-card.copied{border-color:rgba(255,59,59,.85);box-shadow:0 0 0 3px rgba(224,49,49,.18),0 14px 38px rgba(224,49,49,.28)}
 .code-card.copied .sweep{animation:shine 0.9s ease forwards}
-.code-card.copied .copy-ic{background:linear-gradient(135deg,var(--red2),var(--red-dark));color:#fff;border-color:transparent}
-.copied-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:.05em;background:rgba(10,10,12,.55);backdrop-filter:blur(3px);opacity:0;transform:scale(1.06);pointer-events:none;transition:.38s cubic-bezier(.2,.8,.25,1)}
-.copied-overlay svg{width:21px;height:21px;color:#ff5b5b}
-.code-card.copied .copied-overlay{opacity:1;transform:scale(1)}
-.code-card.copied .code{filter:blur(2px);opacity:.35;transition:.3s}
+.code-card.copied .copy-btn{background:linear-gradient(135deg,var(--red2),var(--red-dark));color:#fff;border-color:transparent}
+.code-card.copied .copy-chip{opacity:1;transform:translateY(0)}
 .bar{height:5px;border-radius:99px;background:rgba(255,255,255,.1);margin:15px 4px 9px;overflow:hidden}
 .bar i{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,var(--red-dark),var(--red2));transition:width 1s linear}
 .expires{font-size:13px;color:var(--muted2)}
