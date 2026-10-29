@@ -1,6 +1,6 @@
 /* NecAuth service worker - makes the site installable as an app (PWA)
    and usable offline. App-shell files are cached on first visit. */
-var CACHE = "necauth-v9";
+var CACHE = "necauth-v11";
 var ASSETS = [
   "./", "./index.html", "./css/style.css", "./js/totp.js", "./js/app.js",
   "./manifest.json", "./assets/icons/favicon.svg",

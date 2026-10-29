@@ -37,15 +37,17 @@ button,.tile,.tg-btn,.icon-btn,.mini-btn,.pill,.btn-small,.copy-btn,.paste-btn{p
 
 /* Header */
 .header{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);background:rgba(8,8,10,.55);border-bottom:1px solid var(--border)}
-.header-inner{max-width:900px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
-.brand-name{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.header-inner{max-width:900px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap}
+.brand-name{font-size:22px;font-weight:800;letter-spacing:-.02em;flex-shrink:0;white-space:nowrap}
 .brand-name span{color:var(--red2)}
-.tg-btn{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:.25s}
-.tg-btn:hover{background:rgba(255,255,255,.13);transform:translateY(-2px) scale(1.05);border-color:rgba(255,255,255,.3)}
-.tg-btn svg{width:21px;height:21px}
-.header-actions{display:flex;gap:10px;align-items:center}
+/* Header icons: plain icons in one row (install first, then Telegram), no box around them */
+.tg-btn{width:44px;height:44px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;color:#fff;background:transparent;border:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;transition:.25s}
+.tg-btn:hover{background:transparent;transform:scale(1.12)}
+.tg-btn svg{width:24px;height:24px}
+.header-actions{display:flex;flex-direction:row;flex-wrap:nowrap;gap:14px;align-items:center;flex-shrink:0}
+.header-actions .tg-btn{flex-shrink:0}
 .install-icon-btn{cursor:pointer;padding:0;font:inherit}
-.install-icon-btn.installed{background:linear-gradient(135deg,var(--red2),var(--red-dark));border-color:rgba(255,255,255,.25)}
+.install-icon-btn.installed{color:#ff6b6b}
 .install-pop{position:absolute;top:calc(100% + 8px);right:16px;width:min(280px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:rgba(14,14,17,.96);border:1px solid var(--border-red);box-shadow:var(--shadow);backdrop-filter:blur(16px);z-index:70;animation:rise .3s ease both}
 .install-pop p{font-size:13.5px;color:var(--muted);line-height:1.55}
 
