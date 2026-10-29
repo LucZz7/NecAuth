@@ -46,10 +46,16 @@
 <header class="header">
   <div class="header-inner">
     <span class="brand-name">Nec<span>Auth</span></span>
-    <a class="tg-btn" href="https://t.me/i_necxy" target="_blank" rel="noopener" aria-label="Telegram - @i_necxy" title="@i_necxy">
-      <svg><use href="#i-telegram"/></svg>
-    </a>
+    <div class="header-actions">
+      <button class="tg-btn install-icon-btn" id="installIconBtn" type="button" aria-label="Install App" title="Install App">
+        <svg><use id="installUse" href="#i-download"/></svg>
+      </button>
+      <a class="tg-btn" href="https://t.me/i_necxy" target="_blank" rel="noopener" aria-label="Telegram - @i_necxy" title="@i_necxy">
+        <svg><use href="#i-telegram"/></svg>
+      </a>
+    </div>
   </div>
+  <div class="install-pop hidden" id="installPop"><p id="installPopText"></p></div>
 </header>
 
 <main class="center">
@@ -86,13 +92,6 @@
         </div>
       </div>
 
-      <!-- Long install button: installs NecAuth as an app (PWA) -->
-      <button class="install-btn" id="installBtn" type="button">
-        <span class="ib-icon"><svg><use href="#i-download"/></svg></span>
-        <span class="ib-text"><b id="installLabel">Download App</b><small>Install NecAuth on your phone - works offline</small></span>
-        <span class="ib-check"><svg><use href="#i-check"/></svg></span>
-      </button>
-      <p class="install-hint hidden" id="installHint"></p>
     </div>
   </div>
 

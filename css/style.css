@@ -43,6 +43,11 @@ button,.tile,.tg-btn,.icon-btn,.mini-btn,.pill,.btn-small,.copy-btn,.paste-btn{p
 .tg-btn{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:.25s}
 .tg-btn:hover{background:rgba(255,255,255,.13);transform:translateY(-2px) scale(1.05);border-color:rgba(255,255,255,.3)}
 .tg-btn svg{width:21px;height:21px}
+.header-actions{display:flex;gap:10px;align-items:center}
+.install-icon-btn{cursor:pointer;padding:0;font:inherit}
+.install-icon-btn.installed{background:linear-gradient(135deg,var(--red2),var(--red-dark));border-color:rgba(255,255,255,.25)}
+.install-pop{position:absolute;top:calc(100% + 8px);right:16px;width:min(280px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:rgba(14,14,17,.96);border:1px solid var(--border-red);box-shadow:var(--shadow);backdrop-filter:blur(16px);z-index:70;animation:rise .3s ease both}
+.install-pop p{font-size:13.5px;color:var(--muted);line-height:1.55}
 
 /* Layout + animated gradient border box */
 .center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:38px 20px;width:100%;gap:18px}
@@ -122,19 +127,6 @@ button,.tile,.tg-btn,.icon-btn,.mini-btn,.pill,.btn-small,.copy-btn,.paste-btn{p
 .saved-item.copied .mini-btn[data-saved-copy]{background:linear-gradient(135deg,var(--red2),var(--red-dark));color:#fff;border-color:transparent}
 
 /* Long install button (PWA) - matches the site design */
-.install-btn{width:100%;margin-top:20px;padding:13px 16px;border-radius:15px;display:flex;align-items:center;gap:13px;text-align:left;border:1px solid var(--border-red);background:linear-gradient(160deg,rgba(224,49,49,.18),rgba(255,255,255,.05));cursor:pointer;transition:.25s;overflow:hidden}
-.install-btn:hover{transform:translateY(-1px);border-color:rgba(255,59,59,.7);box-shadow:0 14px 32px rgba(224,49,49,.28)}
-.install-btn:active{transform:scale(.985)}
-.ib-icon{width:46px;height:46px;flex-shrink:0;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--red2),var(--red-dark));box-shadow:0 8px 20px rgba(224,49,49,.4)}
-.ib-icon svg{width:22px;height:22px;color:#fff}
-.ib-text{flex:1;min-width:0;display:flex;flex-direction:column}
-.ib-text b{font-size:16px;font-weight:800;letter-spacing:-.01em}
-.ib-text small{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ib-check{display:none;width:30px;height:30px;flex-shrink:0;border-radius:50%;place-items:center;background:rgba(255,255,255,.12);color:#fff}
-.ib-check svg{width:16px;height:16px}
-.install-btn.installed .ib-check{display:grid}
-.install-btn.installed{opacity:.92}
-.install-hint{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.5;animation:rise .35s ease both}
 
 /* Time chip, QR, tiles, modal (v7) */
 .d2{animation-delay:.2s}

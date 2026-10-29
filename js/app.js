@@ -17,18 +17,21 @@
     });
   }
 
-  /* Install App button: uses the browser install prompt (PWA, not an APK file) */
+  /* Install icon in the header: uses the browser install prompt (PWA, not an APK file) */
   (function () {
     var deferredPrompt = null;
-    var btn = $("installBtn");
-    if (!btn) return;
+    var btn = $("installIconBtn");
+    var pop = $("installPop");
+    if (!btn || !pop) return;
     function isStandalone() {
       return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
     }
     function setInstalled() {
-      $("installLabel").textContent = "App Installed";
+      var use = $("installUse");
+      if (use) use.setAttribute("href", "#i-check");
       btn.classList.add("installed");
-      $("installHint").classList.add("hidden");
+      btn.setAttribute("title", "App Installed");
+      pop.classList.add("hidden");
     }
     if (isStandalone()) setInstalled();
     window.addEventListener("beforeinstallprompt", function (e) {
@@ -50,12 +53,16 @@
         deferredPrompt = null;
         return;
       }
-      var hint = $("installHint");
       var isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-      hint.textContent = isiOS
-        ? "iPhone: Share button dabao, phir 'Add to Home Screen' chuno - NecAuth app icon ban jayega."
-        : "Chrome menu (3 dots) me jao aur 'Install app' ya 'Add to Home Screen' chuno - NecAuth app install ho jayegi.";
-      hint.classList.toggle("hidden");
+      $("installPopText").textContent = isiOS
+        ? "iPhone: tap Share, then choose 'Add to Home Screen' to install NecAuth."
+        : "Open the Chrome menu (3 dots) and choose 'Install app' or 'Add to Home Screen' to install NecAuth.";
+      pop.classList.toggle("hidden");
+    });
+    document.addEventListener("pointerdown", function (e) {
+      if (!pop.classList.contains("hidden") && !e.target.closest("#installIconBtn") && !e.target.closest("#installPop")) {
+        pop.classList.add("hidden");
+      }
     });
   })();
 
