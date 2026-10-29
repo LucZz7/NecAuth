@@ -10,10 +10,54 @@
   var PERIOD = 30;
   var STORAGE_KEY = "necauth_vault_v1";
 
+  /* PWA: register the service worker so the site is installable and offline-ready */
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function (regs) { regs.forEach(function (r) { r.unregister(); }); }).catch(function () {});
-    if (window.caches) caches.keys().then(function (keys) { keys.forEach(function (k) { caches.delete(k); }); }).catch(function () {});
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
   }
+
+  /* Install App button: uses the browser install prompt (PWA, not an APK file) */
+  (function () {
+    var deferredPrompt = null;
+    var btn = $("installBtn");
+    if (!btn) return;
+    function isStandalone() {
+      return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    }
+    function setInstalled() {
+      $("installLabel").textContent = "App Installed";
+      btn.classList.add("installed");
+      $("installHint").classList.add("hidden");
+    }
+    if (isStandalone()) setInstalled();
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+    window.addEventListener("appinstalled", function () {
+      deferredPrompt = null;
+      setInstalled();
+    });
+    btn.addEventListener("click", async function () {
+      if (isStandalone()) { setInstalled(); return; }
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        try {
+          var choice = await deferredPrompt.userChoice;
+          if (choice && choice.outcome === "accepted") setInstalled();
+        } catch (e) {}
+        deferredPrompt = null;
+        return;
+      }
+      var hint = $("installHint");
+      var isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      hint.textContent = isiOS
+        ? "iPhone: Share button dabao, phir 'Add to Home Screen' chuno - NecAuth app icon ban jayega."
+        : "Chrome menu (3 dots) me jao aur 'Install app' ya 'Add to Home Screen' chuno - NecAuth app install ho jayegi.";
+      hint.classList.toggle("hidden");
+    });
+  })();
 
   /* Tap animation: wherever the finger/cursor lands on screen, a small
      red ring + dot bursts at that exact tap point and fades out.

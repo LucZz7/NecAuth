@@ -6,7 +6,13 @@
 <title>NecAuth - Two-Factor Authenticator</title>
 <meta name="description" content="NecAuth - premium two-factor authenticator by NECXY DEVELOPER.">
 <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0a0b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NecAuth">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -79,6 +85,14 @@
           <p>Scan with any authenticator app</p>
         </div>
       </div>
+
+      <!-- Long install button: installs NecAuth as an app (PWA) -->
+      <button class="install-btn" id="installBtn" type="button">
+        <span class="ib-icon"><svg><use href="#i-download"/></svg></span>
+        <span class="ib-text"><b id="installLabel">Download App</b><small>Install NecAuth on your phone - works offline</small></span>
+        <span class="ib-check"><svg><use href="#i-check"/></svg></span>
+      </button>
+      <p class="install-hint hidden" id="installHint"></p>
     </div>
   </div>
 
